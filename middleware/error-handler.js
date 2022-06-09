@@ -1,9 +1,12 @@
 const { StatusCodes } = require("http-status-codes");
+const Logger = require("../logger/logger");
+const logger = Logger.getLogger("./middleware/error-handler.js");
 
 const errorHandlerMiddleware = (err, req, res, next) => {
+  logger.info(`err`, JSON.stringify(err));
   const customError = {
     statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
-    message: err.message || "Something went wrong try again",
+    msg: err.message || "Something went wrong try again",
   };
 
   // mongoose validation Error
@@ -30,7 +33,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     customError.statusCode = StatusCodes.NOT_FOUND;
   }
 
-  res.status(customError.statusCode).json({ msg: customError.message });
+  res.status(customError.statusCode).json({ msg: customError.msg });
 };
 
 module.exports = errorHandlerMiddleware;
