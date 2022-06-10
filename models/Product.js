@@ -11,7 +11,7 @@ const ProductSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: [true, "Image of the product is required"],
+    required: [true, "Image path is is required"],
   },
 });
 
