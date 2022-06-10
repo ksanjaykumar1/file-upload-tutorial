@@ -3,19 +3,24 @@ require("express-async-errors");
 
 const express = require("express");
 const app = express();
-const Logger = require("./logger/logger");
-const logger = Logger.getLogger("./app.js");
+
+const fileUpload = require("express-fileupload");
 
 // local module imports
 const connectDB = require("./db/connect");
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
+const Logger = require("./logger/logger");
+const logger = Logger.getLogger("./app.js");
 
 const auth = require("./routes/auth");
 const product = require("./routes/product");
 
 const port = process.env.PORT || 5000;
+
+app.use(express.static("./public"));
 app.use(express.json({ extended: false }));
+app.use(fileUpload());
 
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/products", product);
