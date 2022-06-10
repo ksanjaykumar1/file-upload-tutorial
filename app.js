@@ -5,7 +5,13 @@ const express = require("express");
 const app = express();
 
 const fileUpload = require("express-fileupload");
-
+// USE V2
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 // local module imports
 const connectDB = require("./db/connect");
 const notFoundMiddleware = require("./middleware/not-found");
@@ -20,7 +26,7 @@ const port = process.env.PORT || 5000;
 
 app.use(express.static("./public"));
 app.use(express.json({ extended: false }));
-app.use(fileUpload());
+app.use(fileUpload({useTempFiles:true}));
 
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/products", product);

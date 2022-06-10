@@ -3,7 +3,9 @@ const path = require("path");
 const { BadRequest } = require("../errors");
 const Logger = require("../logger/logger");
 const logger = Logger.getLogger("./controllers/uploads");
-const uploadProductImage = async (req, res) => {
+const cloudinary = require("cloudinary");
+const fs = require("fs");
+const uploadProductImageLocal = async (req, res) => {
   //   logger.info(JSON.stringify(req.files));
 
   //check file exists
@@ -30,6 +32,20 @@ const uploadProductImage = async (req, res) => {
   return res.status(StatusCodes.OK).json({
     image: { src: `/uploads/${productImage.name}` },
   });
+};
+
+const uploadProductImage = async (req, res) => {
+  logger.info(JSON.stringify(req.files.image));
+  const result = await cloudinary.uploader.upload(
+    req.files.image.tempFilePath,
+    {
+      use_filename: true,
+      folder: "file-upload",
+    }
+  );
+  fs.unlinkSync(req.files.image.tempFilePath);
+
+  res.status(StatusCodes.OK).json({ image: { src: result.secure_url } });
 };
 
 module.exports = {
