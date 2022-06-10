@@ -12,11 +12,13 @@ const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
 const auth = require("./routes/auth");
+const product = require("./routes/product");
 
 const port = process.env.PORT || 5000;
 app.use(express.json({ extended: false }));
 
 app.use("/api/v1/auth", auth);
+app.use("/api/v1/products", product);
 
 // custom middleware
 app.use(errorHandlerMiddleware);
